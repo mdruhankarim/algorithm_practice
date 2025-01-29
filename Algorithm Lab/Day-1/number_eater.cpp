@@ -50,7 +50,7 @@ InputCopy
 OutputCopy
 3
 0
-1*/
+1
 #include<bits/stdc++.h>
 using namespace std;
 int main(){
@@ -70,6 +70,41 @@ int main(){
             }
         }
         cout<<count<<endl;
+    }
+    return 0;
+}
+*/
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAX_N = 1e6 + 10;
+const int MAX_DIGIT = 10;
+int prefix[MAX_N][MAX_DIGIT];
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int n, q;
+    cin >> n >> q;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    for (int i = 0; i < n; ++i) {
+        int num = a[i];
+        bool hasDigit[MAX_DIGIT] = {false};
+        while (num > 0) {
+            int digit = num % 10;
+            hasDigit[digit] = true;
+            num /= 10;
+        }
+        for (int d = 0; d < MAX_DIGIT; ++d) {
+            prefix[i + 1][d] = prefix[i][d] + (hasDigit[d] ? 1 : 0);
+        }
+    }
+    for (int i = 0; i < q; ++i) {
+        int l, r, d;
+        cin >> l >> r >> d;
+        cout << prefix[r][d] - prefix[l - 1][d] << '\n';
     }
     return 0;
 }
