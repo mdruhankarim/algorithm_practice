@@ -76,7 +76,6 @@ int main(){
 */
 #include <bits/stdc++.h>
 using namespace std;
-
 const int MAX_N = 1e6 + 10;
 const int MAX_DIGIT = 10;
 int prefix[MAX_N][MAX_DIGIT];
