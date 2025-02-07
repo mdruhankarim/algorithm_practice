@@ -50,8 +50,6 @@ int main(){
     for(int i=0;i<n;i++){
         cin>>arr[i];
     }
-    
-    // Create prefix sum array
     vector<int> prefix_sum(n+1, 0);
     for(int i=1; i<=n; i++){
         prefix_sum[i] = prefix_sum[i-1] + arr[i-1];
@@ -62,8 +60,9 @@ int main(){
     while(q--){
         int l,r;
         cin>>l>>r;
-        // Calculate sum using prefix sum array
-        int sum = prefix_sum[r] - prefix_sum[l-1];
+        l--; 
+        r--; 
+        int sum = prefix_sum[r+1] - prefix_sum[l];
         cout<<sum<<endl;
     }
     return 0;
