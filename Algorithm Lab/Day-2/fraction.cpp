@@ -41,29 +41,27 @@ OutputCopy
 -3
 
 */
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
-int main(){
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
     int n;
-    cin>>n;
-    vector<int> arr(n);
-    for(int i=0;i<n;i++){
-        cin>>arr[i];
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
     }
-    vector<int> prefix_sum(n+1, 0);
-    for(int i=1; i<=n; i++){
-        prefix_sum[i] = prefix_sum[i-1] + arr[i-1];
+    vector<long long> prefix(n + 1, 0);
+    for (int i = 0; i < n; ++i) {
+        prefix[i + 1] = prefix[i] + a[i];
     }
-    
     int q;
-    cin>>q;
-    while(q--){
-        int l,r;
-        cin>>l>>r;
-        l--; 
-        r--; 
-        int sum = prefix_sum[r+1] - prefix_sum[l];
-        cout<<sum<<endl;
+    cin >> q;
+    while (q--) {
+        int l, r;
+        cin >> l >> r;
+        cout << prefix[r] - prefix[l - 1] << '\n';
     }
     return 0;
 }
