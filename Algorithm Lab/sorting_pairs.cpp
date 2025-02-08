@@ -1,5 +1,5 @@
 /*n
-consisting of whole numbersa
+consisting of whole numbers a
 Given an array. Each element is a pair of numbers. We need to sort the array in ascending order. Ifx1<x2
 or(x1==x2and​​​and1<y2)
 if so, a couple( x 1 , y1)
