@@ -36,8 +36,14 @@ int main(){
     cin>>n;
     int a[n];
     for(int i=0;i<n;i++) cin>>a[i];
+    unordered_map<int, int> freq;
     for(int i=0;i<n;i++){
-        if(a[i]%2!=0){
+        if(a[i] % 2 != 0){
+            freq[a[i]]++;
+        }
+    }
+    for(auto &p : freq){
+        if(p.second >= 3){
             cout<<"YES"<<endl;
             return 0;
         }
