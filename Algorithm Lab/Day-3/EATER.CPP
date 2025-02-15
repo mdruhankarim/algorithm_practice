@@ -50,3 +50,34 @@ OutputCopy
 3
 0
 1*/
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int n, q;
+    cin >> n >> q;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    vector<vector<int>> prefix(n + 1, vector<int>(10, 0));
+    for (int i = 1; i <= n; ++i) {
+        int num = a[i - 1];
+        string s = to_string(num);
+        for (char ch : s) {
+            int d = ch - '0';
+            prefix[i][d] = 1;
+        }
+        for (int d = 0; d < 10; ++d) {
+            prefix[i][d] += prefix[i - 1][d];
+        }
+    }
+    for (int i = 0; i < q; ++i) {
+        int l, r, d;
+        cin >> l >> r >> d;
+        int count = prefix[r][d] - prefix[l - 1][d];
+        cout << count << "\n";
+    }
+    return 0;
+}
