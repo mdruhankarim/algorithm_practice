@@ -67,47 +67,33 @@ NO
 */
 #include<bits/stdc++.h>
 using namespace std;
-#define int long long
-int32_t main(){
+int main(){
     int n;
     cin>>n;
-    vector<pair<int,int>>v;
-    for(int i=0;i<n;i++){
-        int x,y;
-        cin>>x>>y;
-        v.push_back({x,y});
+    vector<pair<int, int>> toys(n);
+    for (int i=0;i<n;++i){
+        cin>>toys[i].first>>toys[i].second;
     }
-    sort(v.begin(),v.end());
-    string ans="";
-    for(auto i:v){
-        if(i.first==0){
-            if(i.second>0){
-                for(int j=0;j<i.second;j++){
-                    ans+="U";
-                }
-            }
-            else{
-                cout<<"NO";
-                return 0;
-            }
-        }
-        else if(i.second==0){
-            if(i.first>0){
-                for(int j=0;j<i.first;j++){
-                    ans+="R";
-                }
-            }
-            else{
-                cout<<"NO";
-                return 0;
-            }
-        }
-        else{
-            cout<<"NO";
+    sort(toys.begin(),toys.end());
+    int currentX=0,currentY=0;
+    string path;
+    for(const auto &toy:toys){
+        int targetX=toy.first;
+        int targetY=toy.second;
+        if (targetX<currentX || targetY<currentY){
+            cout<<"NO"<<endl;
             return 0;
         }
+        while(currentX<targetX){
+            path+='R';
+            currentX++;
+        }
+        while(currentY<targetY){
+            path+='U';
+            currentY++;
+        }
     }
-    cout<<"YES\n";
-    cout<<ans;
+    cout<<"YES"<<endl;
+    cout<<path<<endl;
     return 0;
 }
