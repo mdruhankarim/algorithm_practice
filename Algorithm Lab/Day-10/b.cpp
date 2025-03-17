@@ -57,42 +57,54 @@ Note
 
 #include <bits/stdc++.h>
 using namespace std;
-int main()
-{
+
+int main() {
     int t;
     cin >> t;
-    while (t--)
-    {
+    while (t--) {
         int n;
         long long g;
         cin >> n >> g;
         vector<int> a(n);
-        for (int i = 0; i < n; i++)
-        {
+        for (int i = 0; i < n; i++) {
             cin >> a[i];
         }
-        int left = 1, right = g, k = g;
-        while (left <= right)
-        {
-            int mid = (left + right) / 2;
-            long long total = 0;
-            for (int i = 0; i < n; i++)
-            {
-                int start = a[i];
-                int end = (i + 1 < n) ? min(a[i] + mid - 1, a[i + 1] - 1) : a[i] + mid - 1;
-                total += (end - start + 1);
+        
+        // Binary search to find minimum k
+        long long left = 1, right = 1e18;  // Maximum possible required k could be very large
+        
+        while (left <= right) {
+            long long mid = left + (right - left) / 2;
+            long long total_potatoes = 0;
+            
+            for (int i = 0; i < n; i++) {
+                // Start day for this crop
+                int start_day = a[i];
+                
+                // End day is either k days after planting or the day before next planting
+                int end_day;
+                if (i == n-1) {
+                    // Last planting, can care for full k days
+                    end_day = start_day + mid - 1;
+                } else {
+                    // Care until next planting day or for k days, whichever comes first
+                    end_day = min(start_day + mid - 1, a[i+1] - 1);
+                }
+                
+                // Add the potato harvest for this crop
+                total_potatoes += max(0LL, (long long)(end_day - start_day + 1));
             }
-            if (total >= g)
-            {
-                k = mid;
+            
+            if (total_potatoes >= g) {
+                // This k is sufficient, try smaller
                 right = mid - 1;
-            }
-            else
-            {
+            } else {
+                // This k is not enough, try larger
                 left = mid + 1;
             }
         }
-        cout << k << endl;
+        
+        cout << left << endl;  // left is the minimum value of k that works
     }
     return 0;
 }
