@@ -58,14 +58,22 @@ int main()
             cout << "Sorry" << endl;
             continue;
         }
-        long long max_double = min(n, d / a);
-        long long remaining_money = d - max_double * a;
-        long long single_needed = n - max_double;
-        if (single_needed * b <= remaining_money) {
-            cout << max_double << endl;
-        } else {
-            cout << "Sorry" << endl;
+        
+        long long left = 0, right = n, ans = 0;
+        while (left <= right) {
+            long long mid = left + (right - left) / 2;
+            long long doubles_cost = mid * a;
+            long long singles_needed = n - mid;
+            long long singles_cost = singles_needed * b;
+            if (doubles_cost + singles_cost <= d) {
+                ans = mid;
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
         }
+        
+        cout << ans << endl;
     }
     return 0;
 }
