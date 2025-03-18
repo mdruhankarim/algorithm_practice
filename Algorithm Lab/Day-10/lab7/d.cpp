@@ -60,7 +60,8 @@ InputCopy
 14 4
 OutputCopy
 1*/
-#include<bits/stdc++.h>
+
+#include <bits/stdc++.h>
 using namespace std;
 int main() {
     int n, c, d;
@@ -76,33 +77,42 @@ int main() {
     for(int i = 0; i < n; i++) {
         diff[i] = a[i] - b[i];
     }
-    vector<pair<int, int>> ops;
+    vector<pair<int, int>> absDiffs;
     for(int i = 0; i < n; i++) {
-        ops.push_back({abs(diff[i]), i});
+        absDiffs.push_back({abs(diff[i]), i});
     }
-    sort(ops.rbegin(), ops.rend());
-    for(auto &op : ops) {
-        int idx = op.second;
+    sort(absDiffs.rbegin(), absDiffs.rend());
+    
+    for(auto p : absDiffs) {
+        int absValue = p.first;
+        int idx = p.second;
         if(diff[idx] > 0) {
-            int change = min(c, diff[idx]);
-            diff[idx] -= change;
-            c -= change;
-            change = min(d, diff[idx]);
-            diff[idx] -= change;
-            d -= change;
-        } 
-        else if(diff[idx] < 0) {
-            int change = min(c, -diff[idx]);
-            diff[idx] += change;
-            c -= change;
-            change = min(d, -diff[idx]);
-            diff[idx] += change;
-            d -= change;
+            int ops = min(c, diff[idx]);
+            diff[idx] -= ops;
+            c -= ops;
+        } else if(diff[idx] < 0) {
+            int ops = min(d, -diff[idx]);
+            diff[idx] += ops;
+            d -= ops;
         }
     }
+    while(c > 0 && d > 0) {
+        int maxIdx = -1;
+        int maxDiff = 0;
+        for(int i = 0; i < n; i++) {
+            if(abs(diff[i]) > maxDiff) {
+                maxDiff = abs(diff[i]);
+                maxIdx = i;
+            }
+        }
+        if(maxIdx == -1 || maxDiff == 0) break;
+        diff[maxIdx] += (diff[maxIdx] < 0) ? 1 : -1;
+        c--;
+        d--;
+    }
     long long result = 0;
-    for(int i = 0; i < n; i++) {
-        result += (long long)diff[i] * diff[i];
+    for(int val : diff) {
+        result += (long long)val * val;
     }
     cout << result << endl;
     return 0;
