@@ -57,7 +57,6 @@ Note
 
 #include <bits/stdc++.h>
 using namespace std;
-
 int main() {
     int t;
     cin >> t;
@@ -76,30 +75,56 @@ int main() {
         while (left <= right) {
             long long mid = left + (right - left) / 2;
             long long total_potatoes = 0;
+            bool overflow_detected = false;
             
             for (int i = 0; i < n; i++) {
                 // Start day for this crop
-                int start_day = a[i];
+                long long start_day = static_cast<long long>(a[i]);
                 
                 // End day is either k days after planting or the day before next planting
-                int end_day;
+                long long end_day;
                 if (i == n-1) {
+                    // Check for potential overflow
+                    if (LLONG_MAX - start_day < mid - 1) {
+                        overflow_detected = true;
+                        break;
+                    }
                     // Last planting, can care for full k days
                     end_day = start_day + mid - 1;
                 } else {
                     // Care until next planting day or for k days, whichever comes first
-                    end_day = min(start_day + mid - 1, a[i+1] - 1);
+                    if (LLONG_MAX - start_day < mid - 1) {
+                        end_day = a[i+1] - 1; // Just use next planting day - 1 to avoid overflow
+                    } else {
+                        end_day = min(start_day + mid - 1, static_cast<long long>(a[i+1] - 1));
+                    }
                 }
                 
-                // Add the potato harvest for this crop
-                total_potatoes += max(0LL, (long long)(end_day - start_day + 1));
+                // Add the potato harvest for this crop (safely)
+                long long days_harvested = 0;
+                if (end_day >= start_day) {
+                    days_harvested = end_day - start_day + 1;
+                }
+                
+                // Check for overflow before adding
+                if (LLONG_MAX - total_potatoes < days_harvested) {
+                    overflow_detected = true;
+                    break;
+                }
+                
+                total_potatoes += days_harvested;
+                
+                // Early termination if we already have enough potatoes
+                if (total_potatoes >= g) {
+                    break;
+                }
             }
             
-            if (total_potatoes >= g) {
-                // This k is sufficient, try smaller
+            if (overflow_detected || total_potatoes >= g) {
+                // If we detected overflow or have enough potatoes, try smaller k
                 right = mid - 1;
             } else {
-                // This k is not enough, try larger
+                // If not enough potatoes, try larger k
                 left = mid + 1;
             }
         }
